@@ -16,7 +16,7 @@ io.on('connection', function (socket) {
 		console.log("some idiot left lmao");
 	})
   	socket.emit('news', { hello: 'world' });
-  	socket.emit('hello', 'can you hear me?', 1, 2, 'abc');
+
 
   	socket.broadcast.emit('broadcast', "hello peeps");
   	socket.on('my other event', function (data) {
@@ -24,7 +24,11 @@ io.on('connection', function (socket) {
 	});
 	socket.on('message', function(data) {
 		console.log(data);
+		io.emit('message', data)
 	})
-
+	socket.on('change color', function(color) {
+		io.emit('change color', color);
+	} )
+		
 
 });
