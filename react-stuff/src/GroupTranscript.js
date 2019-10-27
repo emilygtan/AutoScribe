@@ -13,7 +13,9 @@ class GroupTranscript extends Component {
 
       messages: "<h1> chat transcript </h1>",
 
-      transcript:""
+      transcript: "",
+
+      summary: ""
     };
 
   }
@@ -44,6 +46,34 @@ class GroupTranscript extends Component {
     console.log(this.state.color);
   }
 
+  writeSummary = (text) => {
+    this.state.summary = "chat summary: \n" + text;
+  }
+
+  summarizeReq = () => {
+    var toSummarize = this.state.transcript;
+
+    fetch("http://localhost:3000/summarize?body=" + toSummarize, {
+      method: 'GET',
+      //mode: 'no-cors',
+    }) 
+      .then(res => res.text())
+      .then(
+        (result) => {
+          console.log(result);
+          this.writeSummary(result);
+        },
+        // Note: it's important to handle errors here
+        // instead of a catch() block so that we don't swallow
+        // exceptions from actual bugs in components.
+        (error) => {
+          console.log("no bueno");
+          console.log(error);
+        }
+      )
+    this.state.transcript = "";
+  }
+
   componentDidMount= () => {
 
     var recognition = new window.webkitSpeechRecognition();
@@ -71,6 +101,9 @@ class GroupTranscript extends Component {
       console.log(this.state.transcript);
     });
 
+    
+
+
   }
 
   render() {
@@ -83,6 +116,8 @@ class GroupTranscript extends Component {
         <button id="blue" onClick={() => this.setColor('blue')}>Blue</button>
         <button id="red" onClick={() => this.setColor('red')}>Red</button>
         <div>
+          <button id="summarize" onClick={this.summarizeReq}>Summarize Meeting</button>
+          <p>{this.state.summary}</p>
           <h1> chat transcript </h1>
           <p value={this.state.messages}> </p>
         </div>

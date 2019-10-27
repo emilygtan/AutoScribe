@@ -46,6 +46,7 @@ transform: scale(-1, 1); filter: FlipH;";
       this.disabled = true;
       connection.join( predefinedRoomId );
     };
+
   },[]);
   return (
     <div className="App">
