@@ -1,2 +1,4 @@
 react-stuff/node_modules/
 backend_test/node_modules/
+.env
+backend_test/.env
