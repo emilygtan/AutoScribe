@@ -70,7 +70,7 @@ class GroupTranscript extends Component {
   }
 
   render() {
-    if (!this.props.roomCode)
+    if (!this.props.active)
       return null;
     return (
       <div style={{ textAlign: "center" }}>

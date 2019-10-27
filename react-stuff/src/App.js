@@ -19,6 +19,8 @@ function App() {
 
   const [roomCode,setRoomCode] = React.useState("");
 
+  const [connected,setConnected] = React.useState(false);
+
   var connection = new RTCMultiConnection();
   connection.socketURL = 'https://rtcmulticonnection.herokuapp.com:443/';
   connection.session = {
@@ -40,25 +42,19 @@ transform: scale(-1, 1); filter: FlipH;";
   const joinRoom = () => {
     if (!roomCode)
       return;
-    connection.checkPresence(roomCode, function(roomExist, roomid) {
-      alert('Room exists=' + roomExist);
-      if (roomExist === true) {
-        connection.join(roomCode);
-      } else {
-        connection.open(roomCode);
-      }
-    });
+    connection.openOrJoin(roomCode);
+    setConnected(true);
   }
 
   return (
     <div className="App">
-      <div style={{display: roomCode? "none":"block"}}>
+      <div style={{display: connected? "none":"block"}}>
         <input onChange={(e)=>setRoomCode(e.target.value)} />
         <button onClick={joinRoom}>Join Room</button>
       </div>
       <hr />
       <div id="callers"></div>
-      <GroupTranscript roomCode={roomCode} active =  />
+      <GroupTranscript roomCode={roomCode} active = {connected}  />
     </div>
   );
 }
