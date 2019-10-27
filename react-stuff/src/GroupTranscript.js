@@ -63,10 +63,10 @@ class GroupTranscript extends Component {
       )
   }
   inviteMsg = () => {
-    var msg = "Hello, a friend has invited you to a meeting! Enter room code "+this.props.roomCode+ " at "+window.location.href;
+    var msg = "Hello, a friend has invited you to a meeting! Enter room code \""+this.props.roomCode+ "\" at "+window.location.href;
     fetch("http://localhost:3000/send?to="+this.state.phoneNumber+"&message=" + msg, {
       method: 'GET',
-      //mode: 'no-cors',
+      mode: 'no-cors',
     });
   }
   componentDidMount= () => {
@@ -158,7 +158,7 @@ class GroupTranscript extends Component {
       if (this.props.active == true) {
         this.state.recognition.start();
       } else {
-        this.state.stop();
+        this.state.registration.stop();
       }
     }
   }

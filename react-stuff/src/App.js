@@ -47,11 +47,24 @@ transform: scale(-1, 1); filter: FlipH; width: 300px;`;
 
   return (
     <div className="App">
-      <div style={{display: connected? "none":"block"}}>
-        <h1>(Auto)Scribe</h1>
-        <h4>Enter your roomcode below</h4>
-        <input onChange={(e)=>setRoomCode(e.target.value)} />
-        <button onClick={joinRoom}>Join Room</button>
+      <div style={{display: connected? "none":"block",textAlign:'center'}}>
+        <h1>(Auto)Scribe</h1><br/>
+        <h2>Enter your roomcode below</h2><br/>
+        <input onChange={(e)=>setRoomCode(e.target.value)} style={{
+          width:600,
+          height:80,
+          marginBottom:20,
+          outline:'none',
+          border: 'solid 1px',
+          padding:5,
+          fontSize:40,
+          textAlign:'center'
+        }} /><br/>
+        <button style={{
+          width:400,
+          fontSize:30,
+          padding:20
+        }} onClick={joinRoom}>Join Room</button>
       </div>
       <div style={{
         display:'flex'
