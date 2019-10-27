@@ -20,12 +20,9 @@ class GroupTranscript extends Component {
       messages: "<h1> chat transcript </h1>",
       transcript: "",
       summary: "",
-<<<<<<< HEAD
-      recognition:recognition
-=======
+      recognition:recognition,
       voteActive: false,
       wordCount: new Map()
->>>>>>> b25b2baeaae80d75d2fb9f7bf3dc9b3831137af5
     };
   }
   sendMsg = (text) => {
@@ -100,7 +97,7 @@ class GroupTranscript extends Component {
   }
 
   endVote = () => {
-    this.setState({voteActive:false}); 
+    this.setState({voteActive:false});
     console.log("vote finished");
     this.state.wordCount = new Map();
     var textToParse = this.state.transcript;
