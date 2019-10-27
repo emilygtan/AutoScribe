@@ -22,7 +22,8 @@ class GroupTranscript extends Component {
       summary: "",
       recognition:recognition,
       voteActive: false,
-      wordCount: new Map()
+      wordCount: new Map(),
+      phoneNumber:""
     };
   }
   sendMsg = (text) => {
@@ -59,6 +60,13 @@ class GroupTranscript extends Component {
           console.log(error);
         }
       )
+  }
+  inviteMsg = () => {
+    var msg = "Hello, a friend has invited you to a meeting! Enter room code "+this.props.roomCode+ " at "+window.location.href;
+    fetch("http://localhost:3000/send?to="+this.state.phoneNumber+"&message=" + msg, {
+      method: 'GET',
+      //mode: 'no-cors',
+    });
   }
   componentDidMount= () => {
     this.state.socket.on('news', (data) => {
@@ -131,14 +139,23 @@ class GroupTranscript extends Component {
       }
     }
   }
+
   render() {
     if (!this.props.active)
       return null;
     return (
       <div style={{ textAlign: "center" }}>
         <p>Room Code: {this.props.roomCode}</p>
+        <p>Invite a friend (phone number)</p>
+        <input value={this.state.phoneNumber} onChange={(e)=>this.setState({phoneNumber:e.target.value})}/>
+        <button onClick={(e)=>{
+          this.inviteMsg();
+          this.setState({phoneNumber:""})
+        }}> send </button>
+        {/*
         <input type="text" value={this.state.value} onChange={this.handleChange}/>
         <button onClick={this.handleSend}> send </button>
+        */}
         <div>
           <button id="summarize" onClick={this.summarizeReq}>Summarize Meeting</button>
           <p>{this.state.summary}</p>
