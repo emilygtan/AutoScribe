@@ -1,5 +1,5 @@
 # AutoScribe
-HackGT 2019 Team span{emily, kyle, chris, nemo}
+HackGT 2019 Team span{emily, kyle, chris}
 
 
 A web application that will transcribe and summarize a group conference call, like a designated scribe.
