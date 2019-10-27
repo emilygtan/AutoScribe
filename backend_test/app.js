@@ -10,11 +10,14 @@ server.listen(3000, function(){
 app.get('/', function (req, res) {
   res.sendFile(__dirname + '/index.html');
 });
-app.get('/summarize',function (req,res) {
+app.get('/summarize', function (req,res) {
+	console.log("reached");
 	var sentences = req.query.sentences? req.query.sentences : 3;
 	var Summarizer = new SummarizerManager(req.query.body,sentences);
 
-	res.end(JSON.stringify(Summarizer.getSummaryByFrequency().summary));
+	//console.log(Summarizer.getSummaryByFrequency());
+	res.header('Access-Control-Allow-Origin','*');
+	res.send(Summarizer.getSummaryByFrequency().summary);
 });
 io.on('connection', function (socket) {
 	console.log("user connected")
