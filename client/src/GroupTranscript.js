@@ -15,7 +15,7 @@ class GroupTranscript extends Component {
     }
     this.state = {
       color: 'white',
-      socket: openSocket("http://localhost:3000"),
+      socket: openSocket("/"),
       value: "type something!",
       messages: "chat transcript",
       transcript: "",
@@ -43,7 +43,7 @@ class GroupTranscript extends Component {
   }
   summarizeReq = () => {
     var toSummarize = this.state.transcript;
-    fetch("http://localhost:3000/summarize?unpunctuated=true&body=" + toSummarize, {
+    fetch("/summarize?unpunctuated=true&body=" + toSummarize, {
       method: 'GET',
       //mode: 'no-cors',
     })
@@ -64,7 +64,7 @@ class GroupTranscript extends Component {
   }
   inviteMsg = () => {
     var msg = "Hello, a friend has invited you to a meeting! Enter room code \""+this.props.roomCode+ "\" at "+window.location.href;
-    fetch("http://localhost:3000/send?to="+this.state.phoneNumber+"&message=" + msg, {
+    fetch("/send?to="+this.state.phoneNumber+"&message=" + msg, {
       method: 'GET',
       mode: 'no-cors',
     });

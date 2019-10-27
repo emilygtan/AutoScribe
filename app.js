@@ -3,12 +3,20 @@ var server = require('http').Server(app);
 var io = require('socket.io')(server);
 var SummarizerManager = require("node-summarizer").SummarizerManager;
 var request = require('request');
+const express = require('express');
+const path = require('path');
+
 const dotenv = require('dotenv');
 dotenv.config();
 
-server.listen(3000, function(){
-	console.log("listening on 3000");
+var PORT = process.env.port || 3000
+
+server.listen(PORT, function(){
+	console.log("listening on "+PORT);
 }); //listen on port 3000
+
+app.use(express.static(path.join(__dirname, 'client/build')));
+
 
 var APIMarketplaceClient = require('@collaborizm/apimarket/out').APIMarketplaceClient // for project authentication                                                           
 const apiMarketplaceClient = new APIMarketplaceClient({
@@ -31,9 +39,6 @@ app.get('/send',(req,res) => {
 	sendMsg(req.query.message, req.query.to)
 	res.end('success');
 })
-app.get('/', function (req, res) {
-  res.sendFile(__dirname + '/index.html');
-});
 app.get('/summarize', function (req,res) {
 	console.log(req.query);
 	if (req.query.unpunctuated) {
@@ -56,6 +61,9 @@ app.get('/summarize', function (req,res) {
 		res.header('Access-Control-Allow-Origin','*');
 		res.end(Summarizer.getSummaryByFrequency().summary);
 	}
+});
+app.get('*', (req,res) =>{
+    res.sendFile(path.join(__dirname+'/client/build/index.html'));
 });
 io.on('connection', function (socket) {
 	console.log("user connected")

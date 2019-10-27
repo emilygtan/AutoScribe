@@ -1,4 +1,4 @@
-react-stuff/node_modules/
-backend_test/node_modules/
+client/node_modules/
 .env
-backend_test/.env
+.DS_STORE
+node_modules
