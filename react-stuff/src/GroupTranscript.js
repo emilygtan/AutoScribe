@@ -113,6 +113,12 @@ class GroupTranscript extends Component {
         }
       })
     });
+    const filterOut = ["", "vote", "and", "is", "to", "or", "the", "of", "a", "in", "that", "it", "for", "on"];
+    filterOut.forEach((element) => {
+      if (this.state.wordCount.has(element)) {
+        this.state.wordCount.delete(element);
+      }
+    })
     console.log(this.state.wordCount);
     this.setState({transcript:""});
   }
