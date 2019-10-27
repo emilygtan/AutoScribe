@@ -10,7 +10,9 @@ class GroupTranscript extends Component {
       value: "type something!",
       messages: "<h1> chat transcript </h1>",
       transcript: "",
-      summary: ""
+      summary: "",
+      voteActive: false,
+      wordCount: new Map()
     };
   }
   sendMsg = (text) => {
@@ -67,6 +69,52 @@ class GroupTranscript extends Component {
       this.setState({transcript:this.state.transcript+"\n"+data});
       console.log(this.state.transcript);
     });
+
+    var checkingForVote = setInterval(this.checkForVote, 1000);
+  }
+
+  checkForVote = () => {
+    //console.log("hello its working");
+    if (!this.state.voteActive) {
+      var textToParse = this.state.transcript;
+      var lines = textToParse.split("\n");
+      lines.forEach((element) => {
+        //console.log(element);
+        var words = element.split(" ");
+        words.forEach((element) => {
+          if (element=="vote") {
+            this.startVote();
+          }
+        })
+      });
+    }
+  }
+
+  startVote = () => {
+    console.log("vote started");
+    this.setState({voteActive:true});
+    var endPoll = setTimeout(this.endVote, 20000);
+  }
+
+  endVote = () => {
+    this.setState({voteActive:false}); 
+    console.log("vote finished");
+    this.state.wordCount = new Map();
+    var textToParse = this.state.transcript;
+    var lines = textToParse.split("\n");
+    lines.forEach((element) => {
+      //console.log(element);
+      var words = element.split(" ");
+      words.forEach((element) => {
+        if (this.state.wordCount.has(element)) {
+          this.state.wordCount.set(element, this.state.wordCount.get(element) + 1);
+        } else {
+          this.state.wordCount.set(element, 1);
+        }
+      })
+    });
+    console.log(this.state.wordCount);
+    this.setState({transcript:""});
   }
 
   render() {
