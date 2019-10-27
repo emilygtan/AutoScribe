@@ -17,11 +17,12 @@ class GroupTranscript extends Component {
       color: 'white',
       socket: openSocket("http://localhost:3000"),
       value: "type something!",
-      messages: "<h1> chat transcript </h1>",
+      messages: "chat transcript",
       transcript: "",
       summary: "",
       recognition:recognition,
       voteActive: false,
+      votesHeld: 0,
       wordCount: new Map(),
       phoneNumber:""
     };
@@ -84,6 +85,7 @@ class GroupTranscript extends Component {
   checkForVote = () => {
     //console.log("hello its working");
     if (!this.state.voteActive) {
+      var timesAppeared = 0;
       var textToParse = this.state.transcript;
       var lines = textToParse.split("\n");
       lines.forEach((element) => {
@@ -91,7 +93,10 @@ class GroupTranscript extends Component {
         var words = element.split(" ");
         words.forEach((element) => {
           if (element=="vote") {
-            this.startVote();
+            timesAppeared++;
+            if (timesAppeared > this.state.votesHeld) {
+              this.startVote();
+            }
           }
         })
       });
@@ -101,11 +106,14 @@ class GroupTranscript extends Component {
   startVote = () => {
     console.log("vote started");
     this.setState({voteActive:true});
+    this.setState({messages:"VOTE IN PROGRESS"});
+    this.setState({votesHeld:this.state.votesHeld+1});
     var endPoll = setTimeout(this.endVote, 20000);
   }
 
   endVote = () => {
     this.setState({voteActive:false});
+    this.setState({messages:"chat transcript"});
     console.log("vote finished");
     this.state.wordCount = new Map();
     var textToParse = this.state.transcript;
@@ -128,7 +136,22 @@ class GroupTranscript extends Component {
       }
     })
     console.log(this.state.wordCount);
-    this.setState({transcript:""});
+
+    this.state.wordCount[Symbol.iterator] = function* () {
+        yield* [...this.entries()].sort((a, b) => b[1] - a[1]);
+    }
+    var count = 0;
+    var voteResult = "Vote Complete. Top 3 Results were: \n";
+    for (let [key, value] of this.state.wordCount) {     // get data sorted
+      count++;
+      voteResult += key + " with " + value + " votes\n"
+      if (count == 3) {
+        break;
+      }
+    }
+    this.setState({transcript:this.state.transcript+'\n'+voteResult});
+
+    //this.setState({transcript:""});
   }
   componentDidUpdate(prevProps) {
     if (prevProps.active != this.props.active) {
@@ -159,8 +182,8 @@ class GroupTranscript extends Component {
         <div>
           <button id="summarize" onClick={this.summarizeReq}>Summarize Meeting</button>
           <p>{this.state.summary}</p>
-          <p> <strong> chat transcript </strong> </p>
-          <p value={this.state.messages}> </p>
+          <p> <strong> {this.state.messages} </strong> </p>
+          {/**<p value={this.state.messages}> </p>**/}
         </div>
         <pre>{this.state.transcript}</pre>
       </div>
