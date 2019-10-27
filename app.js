@@ -9,7 +9,7 @@ const path = require('path');
 const dotenv = require('dotenv');
 dotenv.config();
 
-var PORT = process.env.port || 8080
+var PORT = process.env.port || 3000;
 
 server.listen(PORT, function(){
 	console.log("listening on "+PORT);
