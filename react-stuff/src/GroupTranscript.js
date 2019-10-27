@@ -121,7 +121,8 @@ class GroupTranscript extends Component {
     lines.forEach((element) => {
       //console.log(element);
       var words = element.split(" ");
-      words.forEach((element) => {
+      words.forEach((e) => {
+        var element = e.toLowerCase();
         if (this.state.wordCount.has(element)) {
           this.state.wordCount.set(element, this.state.wordCount.get(element) + 1);
         } else {
@@ -130,7 +131,8 @@ class GroupTranscript extends Component {
       })
     });
     const filterOut = ["", "vote", "and", "is", "to", "or", "the", "of", "a", "in", "that", "it", "for", "on"];
-    filterOut.forEach((element) => {
+    filterOut.forEach((e) => {
+      var element = e.toLowerCase();
       if (this.state.wordCount.has(element)) {
         this.state.wordCount.delete(element);
       }
@@ -144,7 +146,7 @@ class GroupTranscript extends Component {
     var voteResult = "Vote Complete. Top 3 Results were: \n";
     for (let [key, value] of this.state.wordCount) {     // get data sorted
       count++;
-      voteResult += key + " with " + value + " votes\n"
+      voteResult += key + " with " + value + " votes \n"
       if (count == 3) {
         break;
       }
@@ -167,14 +169,16 @@ class GroupTranscript extends Component {
     if (!this.props.active)
       return null;
     return (
-      <div style={{ textAlign: "center" }}>
-        <p>Room Code: {this.props.roomCode}</p>
-        <p>Invite a friend (phone number)</p>
+      <div style={{ textAlign: "center", padding: 5 }}>
+        <h2>Room Code:</h2> <strong style={{fontSize:30}}> {this.props.roomCode}</strong>
+        <p>
+        Invite a friend (phone number) <br/>
         <input value={this.state.phoneNumber} onChange={(e)=>this.setState({phoneNumber:e.target.value})}/>
         <button onClick={(e)=>{
           this.inviteMsg();
           this.setState({phoneNumber:""})
         }}> send </button>
+        </p>
         {/*
         <input type="text" value={this.state.value} onChange={this.handleChange}/>
         <button onClick={this.handleSend}> send </button>
@@ -185,7 +189,14 @@ class GroupTranscript extends Component {
           <p> <strong> {this.state.messages} </strong> </p>
           {/**<p value={this.state.messages}> </p>**/}
         </div>
-        <pre>{this.state.transcript}</pre>
+        <div style={{
+          textAlign:'left',
+          backgroundColor:'#333',
+          width:'90%',
+          margin:'auto'
+        }}>
+          <pre>{this.state.transcript}</pre>
+        </div>
       </div>
     )
   }

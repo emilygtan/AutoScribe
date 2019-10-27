@@ -48,7 +48,7 @@ transform: scale(-1, 1); filter: FlipH; width: 300px;`;
   return (
     <div className="App">
       <div style={{display: connected? "none":"block",textAlign:'center'}}>
-        <h1>(Auto)Scribe</h1><br/>
+        <h1>AutoScribe</h1><br/>
         <h2>Enter your roomcode below</h2><br/>
         <input onChange={(e)=>setRoomCode(e.target.value)} style={{
           width:600,
@@ -73,6 +73,7 @@ transform: scale(-1, 1); filter: FlipH; width: 300px;`;
           width:"70vw",
           display:'flex',
           alignItems:'center',
+          height:'99vh',
           justifyContent:'space-around',
           flexWrap:'wrap',
           marginTop:'10px'
