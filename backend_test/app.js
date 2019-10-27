@@ -2,7 +2,7 @@ var app = require('express')();
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
 var SummarizerManager = require("node-summarizer").SummarizerManager;
-
+var request = require('request');
 const dotenv = require('dotenv');
 dotenv.config();
 
@@ -35,13 +35,27 @@ app.get('/', function (req, res) {
   res.sendFile(__dirname + '/index.html');
 });
 app.get('/summarize', function (req,res) {
-	console.log("reached");
-	var sentences = req.query.sentences? req.query.sentences : 3;
-	var Summarizer = new SummarizerManager(req.query.body,sentences);
+	console.log(req.query);
+	if (req.query.unpunctuated) {
+		request.post({
+			headers: {'content-type' : 'application/x-www-form-urlencoded'},
+			url: "http://bark.phon.ioc.ee/punctuator", 
+			body: "text="+req.query.body
+		}, function(e, r, b) {
+			var sentences = req.query.sentences? req.query.sentences : 3;
+			var Summarizer = new SummarizerManager(b,sentences);
+			//console.log(Summarizer.getSummaryByFrequency());
+			res.header('Access-Control-Allow-Origin','*');
+			res.end(Summarizer.getSummaryByFrequency().summary);
+		})
+	} else {
+		var sentences = req.query.sentences? req.query.sentences : 3;
+		var Summarizer = new SummarizerManager(req.query.body,sentences);
 
-	//console.log(Summarizer.getSummaryByFrequency());
-	res.header('Access-Control-Allow-Origin','*');
-	res.send(Summarizer.getSummaryByFrequency().summary);
+		//console.log(Summarizer.getSummaryByFrequency());
+		res.header('Access-Control-Allow-Origin','*');
+		res.end(Summarizer.getSummaryByFrequency().summary);
+	}
 });
 io.on('connection', function (socket) {
 	console.log("user connected")

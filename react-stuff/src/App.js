@@ -18,7 +18,6 @@ function App() {
   window.io = io;
 
   const [roomCode,setRoomCode] = React.useState("");
-
   const [connected,setConnected] = React.useState(false);
 
   var connection = new RTCMultiConnection();
@@ -34,9 +33,9 @@ function App() {
   connection.onstream = function(event) {
     var video = event.mediaElement;
     video.controls = false;
-    video.style.cssText = "-moz-transform: scale(-1, 1); \
--webkit-transform: scale(-1, 1); -o-transform: scale(-1, 1); \
-transform: scale(-1, 1); filter: FlipH;";
+    video.style.cssText = `-moz-transform: scale(-1, 1);
+-webkit-transform: scale(-1, 1); -o-transform: scale(-1, 1);
+transform: scale(-1, 1); filter: FlipH; width: 300px;`;
     document.getElementById("callers").appendChild( event.mediaElement );
   };
   const joinRoom = () => {
@@ -49,12 +48,29 @@ transform: scale(-1, 1); filter: FlipH;";
   return (
     <div className="App">
       <div style={{display: connected? "none":"block"}}>
+        <h1>(Auto)Scribe</h1>
+        <h4>Enter your roomcode below</h4>
         <input onChange={(e)=>setRoomCode(e.target.value)} />
         <button onClick={joinRoom}>Join Room</button>
       </div>
-      <hr />
-      <div id="callers"></div>
-      <GroupTranscript roomCode={roomCode} active = {connected}  />
+      <div style={{
+        display:'flex'
+      }}>
+        <div id="callers" style={{
+          width:"70vw",
+          display:'flex',
+          alignItems:'center',
+          justifyContent:'space-around',
+          flexWrap:'wrap',
+          marginTop:'10px'
+        }}></div>
+        <div style={{
+          width:"29vw"
+        }}>
+          <GroupTranscript roomCode={roomCode} active = {connected}  />
+        </div>
+
+      </div>
     </div>
   );
 }
