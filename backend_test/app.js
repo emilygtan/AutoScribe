@@ -64,11 +64,11 @@ io.on('connection', function (socket) {
 	})
   	socket.emit('news', { hello: 'world' });
 
-
   	socket.broadcast.emit('broadcast', "hello peeps");
   	socket.on('my other event', function (data) {
 	    console.log(data);
 	});
+	
 	socket.on('message', function(data) {
 		console.log(data);
 		io.emit('message', data)

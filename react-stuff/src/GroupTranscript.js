@@ -135,7 +135,7 @@ class GroupTranscript extends Component {
       if (this.props.active == true) {
         this.state.recognition.start();
       } else {
-        this.state.stop();
+        this.state.registration.stop();
       }
     }
   }
